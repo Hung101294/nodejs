@@ -1,0 +1,31 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "// bài tập:\r // Bài 1: 7đ",
+  "main": "index.js",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "crypto": "^1.0.1",
+    "express": "^4.18.1",
+    "express-handlebars": "^6.0.6",
+    "express-session": "^1.17.3",
+    "moment": "^2.29.3",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.16"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hung101294/nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hung101294/nodejs/issues"
+  },
+  "homepage": "https://github.com/Hung101294/nodejs#readme"
+}
