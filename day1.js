@@ -80,6 +80,18 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 function getMethod(req, res) {
     res.send('ok')
 }
+
+function firstCheck(req, res, next) {
+    console.log('firstCheck')
+    if (1 === 1) {
+        next()
+    }
+}
+
+app.get('/midleware', firstCheck, function (req, res) {
+
+})
+
 app.get('/product/:id/:name', function (req, res) {
     // query, param
     console.log(req.params)

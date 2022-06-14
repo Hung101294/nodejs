@@ -2,10 +2,11 @@ const express = require('express')
 const f = require('fs')
 const moment = require('moment')
 const handlebars = require("express-handlebars")
+// const { create } = require("express-handlebars")
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const session = require('express-session')
-const { render } = require('express/lib/response')
+const { render, redirect } = require('express/lib/response')
 const { fail } = require('assert')
 const crypto = require("crypto")
 const pathUsers = './users.json'
@@ -24,10 +25,15 @@ app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 } }))
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 app.set('views', './views');
+// static folder
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(morgan(':remote-addr :method :url :status :res[content-length] - :response-time ms'))
+
+if (!(f.existsSync(pathUsers))) {
+    f.writeFileSync(pathUsers, '')
+}
 
 function passwordHashCrypto(pwd, res) {
     const sha256Hasher = crypto.createHmac("sha256", secret);
@@ -62,7 +68,8 @@ app.post('/register', async function (req, res) {
                     f.writeFileSync(pathUsers, JSON.stringify(dataUser))
                     // return res.status(200).json({ message: "Add User Success!" })
                     req.session.username = { username: username }
-                    return res.render("home", { username: username })
+                    return res.redirect('/')
+                    // return res.render("home", { username: username })
                 } else {
                     // return res.status(408).json({ message: "Duplicate!" })
                     return res.render("login", { layout: false, classActive: classActive, username: username, password: pwd, messageRegister: "Duplicate!" })
@@ -70,7 +77,8 @@ app.post('/register', async function (req, res) {
             } else {
                 f.writeFileSync(pathUsers, JSON.stringify([req.body]))
                 req.session.username = { username: username }
-                return res.render("home", { username: username })
+                return res.redirect('/')
+                // return res.render("home", { username: username })
                 // return res.status(200).json({ message: "Add User Success!" })
             }
         }
@@ -89,7 +97,8 @@ app.post('/login', async (req, res) => {
         if (pwdhash === user.password) {
             req.session.username = { username: username }
             // res.status(200).json({ message: "Login Success" })
-            return res.render("home", { username: username })
+            return res.redirect('/');
+            // return res.render("home", { username: username })
         } else {
             // res.status(400).json({ error: "Invalid Password" })
             return res.render("login", { layout: false, classActive: classActive, username: username, password: password, messageLogin: "Invalid Password" })
@@ -98,7 +107,7 @@ app.post('/login', async (req, res) => {
         // res.status(401).json({ error: "User does not exist" })
         return res.render("login", { layout: false, classActive: classActive, username: username, password: password, messageLogin: "User does not exist" })
     }
-});
+})
 
 app.get("/", function (req, res) {
     const classActive = "";
